@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
             advancedCarDataDiv.innerHTML = `
-                <h2>Advanced Data</h2>
+                <h2>Vehicle Attributes</h2>
                 ${advancedData.attributes.map(attr => `<p><strong>${attr.name}:</strong> ${attr.value}</p>`).join('')}
             `;
 
@@ -130,4 +130,3 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchCarData(tokenId);
     }
 });
-

@@ -3,25 +3,26 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #000;  
-    color: #fff;  
+    align-items: flex-start;  
+    min-height: 100vh;
+    background-color: #000;  /* Black background */
+    color: #fff;  /* White text */
     margin: 0;
 }
 
 .container {
-    background: #1e1e1e; 
+    background: #1e1e1e;  /* Dark gray background for contrast */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  /* Softer shadow */
     text-align: center;
-    max-width: 400px; 
-    width: 100%;
-    position: relative; 
+    max-width: 400px;  /* Restrict width for better readability */
+    width: 100%; /* Use 90% width */
+    position: relative; /* Position relative for positioning the share button */
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 20px; /* Add some margin at the top */
 }
 
 h1 {
@@ -29,51 +30,52 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2em; 
+    font-size: 2em; /* Change font size here */
 }
 
 h2 {
     margin-bottom: 20px;
-    font-size: 1.5em;
+    font-size: 1.5em; /* Change font size here */
 }
 
 h2 i {
-    margin-left: 10px;
+    margin-left: 10px; /* Space between text and icon */
 }
 h2.beta {
-    margin-top: -10px; 
-    font-size: 1em; 
-    color: #ccc; 
+    margin-top: -10px; /* Adjust to move closer to the previous heading */
+    font-size: 1em; /* Change font size for BETA heading */
+    color: #ccc; /* Optional: Different color for BETA */
 }
 
 h1 i {
-    margin-right: 10px; 
+    margin-right: 10px; /* Space between icon and text */
 }
 input {
     padding: 10px;
     margin-bottom: 10px;
     width: 100%;
     box-sizing: border-box;
-    border: 1px solid #444;  
+    border: 1px solid #444;  /* Border color for inputs */
     border-radius: 4px;
-    background-color: #333; 
-    color: #fff;  
+    background-color: #333;  /* Darker input background */
+    color: #fff;  /* White text inside inputs */
 }
 
 button {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
-    background: #007BFF; 
+    background: #007BFF;  /* Blue background */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s ease; 
+    transition: background 0.3s ease;  /* Smooth transition for hover effect */
+    margin-bottom: 15px; /* Add space between buttons */
 }
 
 button:hover {
-    background: #0056b3;  
+    background: #0056b3;  /* Darker blue on hover */
 }
 
 #carData {
@@ -82,7 +84,7 @@ button:hover {
 }
 
 #carData p {
-    margin: 0 0 10px;  
+    margin: 0 0 10px;  /* Space between paragraphs */
 }
 
 #carData h2 {
@@ -94,9 +96,7 @@ button:hover {
     padding: 5px 10px;  
     height: auto;  
     width: 100%; 
-    position: absolute;
-    top: 715px;
-    right: 0px;
+    margin-top: 15px; /* Add space between buttons */
 }
 
 .fa-twitter {
@@ -112,13 +112,11 @@ button:hover {
     color: #0056b3; 
 }
 
-
 a.icon-link {
     color: #007BFF; 
     text-decoration: none;
     font-size: 26px; 
 }
-
 
 .advanced-car-data {
     margin-top: 20px;
@@ -129,7 +127,30 @@ a.icon-link {
     text-align: left;
     max-width: 400px; 
     display: none;  
-    position: absolute;  
-    right: -450px;  
-    top: 0; 
+}
+
+/* Media Queries for mobile optimization */
+@media (max-width: 415px) {
+    .container {
+        max-width: 100%; /* Use full width on mobile */
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em; /* Adjust font size */
+    }
+
+    h2 {
+        font-size: 1.2em; /* Adjust font size */
+    }
+
+    .share-button {
+        width: auto; /* Adjust width */
+        margin-top: 10px;
+    }
+
+    .advanced-car-data {
+        margin-top: 10px;
+        max-width: 100%;
+    }
 }
