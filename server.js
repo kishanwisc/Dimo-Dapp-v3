@@ -36,6 +36,9 @@ app.post('/fetchCarData', async (req, res) => {
                     year
                     id
                 }
+                earnings {
+                    totalTokens
+                }
             }
         }
     `;
@@ -115,6 +118,62 @@ app.post('/fetchAdvancedCarData', async (req, res) => {
             return res.json(responseData.data.deviceDefinition);
         } else {
             return res.status(404).json({ error: 'No data found for the given definition ID.' });
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/fetchRewardsHistory', async (req, res) => {
+    const { tokenId } = req.body;
+    console.log('Received Token ID:', tokenId);
+    const query = `
+        query {
+            vehicle(tokenId: ${tokenId}) {
+                earnings {
+                    totalTokens
+                    history(first: 1) {
+                        totalCount
+                        edges {
+                            node {
+                                connectionStreak
+                                week
+                                streakTokens
+                                aftermarketDeviceTokens
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    `;
+
+    try {
+        const response = await axios.post(process.env.DIMO_API_URL, { query }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
+
+        console.log('API Response:', response.data);
+
+        if (response.headers['content-type'].includes('text/html')) {
+            console.error('Received HTML instead of JSON, please check the endpoint or authentication.');
+            return res.status(500).json({ error: 'Invalid response from server' });
+        }
+
+        const responseData = response.data;
+        if (responseData.errors) {
+            console.error('GraphQL errors:', responseData.errors);
+            return res.status(500).json({ errors: responseData.errors });
+        }
+
+        if (responseData.data && responseData.data.vehicle) {
+            return res.json(responseData.data.vehicle.earnings.history);
+        } else {
+            return res.status(404).json({ error: 'No rewards history found for the given token ID.' });
         }
     } catch (error) {
         console.error('Fetch error:', error);

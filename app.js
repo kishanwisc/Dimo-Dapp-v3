@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tokenInput = document.getElementById('tokenInput');
     const getCarDataButton = document.getElementById('getCarDataButton');
     const getAdvancedDataButton = document.getElementById('getAdvancedDataButton');
+    const getRewardsHistoryButton = document.getElementById('getRewardsHistoryButton');
     const shareTwitterButton = document.getElementById('shareTwitterButton');
 
     let carData = null;
@@ -27,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             carData = await response.json();
 
-          
             carDataDiv.innerHTML = `
                 <h2>Car Data</h2>
                 <p><strong>ID:</strong> ${carData.id}</p>
@@ -36,25 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="https://polygonscan.com/address/${carData.owner}" class="icon-link" target="_blank"><i class="fa-solid fa-link"></i></a>
                 <p><strong>Minted At:</strong> ${carData.mintedAt ? carData.mintedAt : 'N/A'}</p>
                 <p><strong>DCN Name:</strong> ${carData.dcn ? carData.dcn.name : 'N/A'}</p>
+                <p><strong>Total Tokens:</strong> ${carData.earnings ? carData.earnings.totalTokens : 'N/A'}</p>
                 <p><strong>Make:</strong> ${carData.definition ? carData.definition.make : 'N/A'}</p>
                 <p><strong>Model:</strong> ${carData.definition ? carData.definition.model : 'N/A'}</p>
                 <p><strong>Year:</strong> ${carData.definition ? carData.definition.year : 'N/A'}</p>
                 <p><strong>Definition ID:</strong> ${carData.definition ? carData.definition.id : 'N/A'}</p>
             `;
 
-
             shareTwitterButton.style.display = 'block';
+            getRewardsHistoryButton.style.display = 'block';
 
-         
             if (carData.definition && carData.definition.id) {
                 getAdvancedDataButton.style.display = 'block';
             } else {
                 getAdvancedDataButton.style.display = 'none';
             }
 
-      
             advancedCarDataDiv.style.display = 'none';
-
         } catch (error) {
             carDataDiv.innerHTML = `<p>Error fetching data: ${error.message}</p>`;
         }
@@ -79,17 +77,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const advancedData = await response.json();
 
-    
             advancedCarDataDiv.innerHTML = `
                 <h2>Vehicle Attributes</h2>
                 ${advancedData.attributes.map(attr => `<p><strong>${attr.name}:</strong> ${attr.value}</p>`).join('')}
             `;
 
-
             advancedCarDataDiv.style.display = 'block';
-
         } catch (error) {
             advancedCarDataDiv.innerHTML = `<p>Error fetching advanced data: ${error.message}</p>`;
+        }
+    };
+
+    const fetchRewardsHistory = async (tokenId) => {
+        try {
+            console.log('Fetching rewards history for Token ID:', tokenId);
+            const response = await fetch('/fetchRewardsHistory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tokenId }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                carDataDiv.innerHTML = `<p>Error: ${errorText}</p>`;
+                return;
+            }
+
+            const rewardsHistory = await response.json();
+
+            advancedCarDataDiv.innerHTML = `
+                <h2>Rewards History</h2>
+                ${rewardsHistory.edges.map(edge => `
+                    <p><strong>Week:</strong> ${edge.node.week}</p>
+                    <p><strong>Connection Streak:</strong> ${edge.node.connectionStreak}</p>
+                    <p><strong>Streak Tokens:</strong> ${edge.node.streakTokens}</p>
+                    <p><strong>Aftermarket Device Tokens:</strong> ${edge.node.aftermarketDeviceTokens}</p>
+                `).join('')}
+            `;
+
+            advancedCarDataDiv.style.display = 'block';
+        } catch (error) {
+            advancedCarDataDiv.innerHTML = `<p>Error fetching rewards history: ${error.message}</p>`;
         }
     };
 
@@ -119,10 +149,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    getRewardsHistoryButton.addEventListener('click', () => {
+        const tokenId = tokenInput.value;
+        if (tokenId) {
+            fetchRewardsHistory(tokenId);
+        }
+    });
+
     shareTwitterButton.addEventListener('click', () => {
         shareOnTwitter();
     });
-
 
     const tokenId = window.location.pathname.split('/').pop();
     if (tokenId && tokenId !== 'token') {
