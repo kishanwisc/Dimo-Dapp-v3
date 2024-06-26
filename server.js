@@ -188,3 +188,8 @@ app.get('/token/:tokenId', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status:'UP'});
+});
+
