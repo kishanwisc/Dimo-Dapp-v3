@@ -2,10 +2,10 @@
   "name": "your-project-name",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "api/index.js",  // Ensure this path is correct based on your directory structure
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node api/index.js"  // Update this path if you renamed server.js to index.js and moved it to the api folder
   },
   "dependencies": {
     "axios": "^0.21.4",
